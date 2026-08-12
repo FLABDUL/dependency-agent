@@ -68,6 +68,9 @@ export default {
     if (url.pathname === "/api/health") {
       return Response.json({ status: "ok" });
     }
+    if (url.pathname === "/favicon.ico") {
+      return new Response(null, { status: 204 });
+    }
     return new Response("Not found", { status: 404 });
   },
 };

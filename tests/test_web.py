@@ -23,3 +23,7 @@ def test_home_page_serves_the_demo() -> None:
 
     assert response.status_code == 200
     assert "A broken build" in response.text
+
+
+def test_favicon_request_is_quiet() -> None:
+    assert client.get("/favicon.ico").status_code == 204
