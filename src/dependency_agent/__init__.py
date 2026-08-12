@@ -1,3 +1,6 @@
-from dotenv import load_dotenv
+"""Dependency Agent: evidence-led Maven dependency diagnosis."""
 
-load_dotenv()
+from dependency_agent.analyser import analyse_maven_project
+
+__all__ = ["analyse_maven_project"]
+__version__ = "0.1.0"

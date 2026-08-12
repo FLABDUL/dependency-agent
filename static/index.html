@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#080b10" />
+    <meta
+      name="description"
+      content="Dependency Agent traces a real Maven compilation failure to an incompatible SLF4J version and proposes the smallest verified fix."
+    />
+    <meta property="og:title" content="Dependency Agent — Maven failure, explained" />
+    <meta
+      property="og:description"
+      content="A focused, evidence-led demonstration of dependency diagnosis."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/static/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="/static/og.png" />
+    <title>Dependency Agent — Maven failure, explained</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#demo">Skip to demo</a>
+
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Dependency Agent home">
+        <span class="brand-mark" aria-hidden="true">DA</span>
+        <span>Dependency Agent</span>
+      </a>
+      <a
+        class="source-link"
+        href="https://github.com/FLABDUL/dependency-agent"
+        target="_blank"
+        rel="noreferrer"
+      >
+        View source <span aria-hidden="true">↗</span>
+      </a>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="eyebrow"><span class="pulse-dot"></span> Maven diagnostic / 01</div>
+        <h1 id="hero-title">A broken build.<br /><span>One precise answer.</span></h1>
+        <p class="hero-copy">
+          Dependency Agent connects source-level API usage to Maven metadata,
+          explains the incompatibility, and proposes the smallest defensible fix.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#demo">Inspect the failure</a>
+          <span class="hero-note">Curated demo · no uploads · no API key</span>
+        </div>
+      </section>
+
+      <section class="demo-shell" id="demo" aria-labelledby="demo-title">
+        <div class="demo-header">
+          <div>
+            <p class="section-kicker">Live analysis</p>
+            <h2 id="demo-title">SLF4J compilation failure</h2>
+          </div>
+          <div class="status-pill"><span></span> Ready to inspect</div>
+        </div>
+
+        <div class="workspace-grid">
+          <section class="code-panel" aria-label="Broken project input">
+            <div class="panel-toolbar">
+              <div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+              <div class="tabs" role="tablist" aria-label="Input files">
+                <button class="tab is-active" role="tab" aria-selected="true" data-file="source">App.java</button>
+                <button class="tab" role="tab" aria-selected="false" data-file="pom">pom.xml</button>
+              </div>
+            </div>
+            <pre class="code-window" tabindex="0"><code id="input-code">Loading fixture…</code></pre>
+            <div class="build-output">
+              <span class="output-label">BUILD OUTPUT</span>
+              <code>[ERROR] package org.slf4j.spi does not exist</code>
+              <code>[ERROR] cannot find symbol: class LoggingEventBuilder</code>
+            </div>
+          </section>
+
+          <aside class="analysis-panel" aria-label="Analysis controls">
+            <span class="analysis-number">01</span>
+            <p class="analysis-prompt">What is preventing this Maven project from compiling?</p>
+            <ul class="scope-list">
+              <li><span>Input</span> Source + POM</li>
+              <li><span>Method</span> Deterministic rules</li>
+              <li><span>Output</span> Evidence + patch</li>
+            </ul>
+            <button class="button button-run" id="run-analysis" type="button">
+              <span>Run analysis</span><span aria-hidden="true">→</span>
+            </button>
+          </aside>
+        </div>
+
+        <section class="progress-card" id="progress" aria-live="polite" hidden>
+          <p class="section-kicker">Analysis in progress</p>
+          <ol class="progress-steps">
+            <li><span>01</span><div><strong>Read source imports</strong><small>Locating API requirements</small></div></li>
+            <li><span>02</span><div><strong>Inspect Maven metadata</strong><small>Resolving declared versions</small></div></li>
+            <li><span>03</span><div><strong>Compare compatibility</strong><small>Connecting cause to failure</small></div></li>
+          </ol>
+        </section>
+
+        <section class="results" id="results" aria-live="polite" hidden>
+          <div class="result-summary">
+            <div class="result-icon" aria-hidden="true">!</div>
+            <div>
+              <div class="result-meta">
+                <span class="danger-label">Root cause found</span>
+                <span id="confidence">High confidence</span>
+              </div>
+              <h3 id="result-headline">SLF4J API version mismatch</h3>
+              <p id="result-summary"></p>
+            </div>
+          </div>
+
+          <div class="evidence-grid" id="evidence"></div>
+
+          <div class="fix-card">
+            <div class="fix-heading">
+              <div>
+                <p class="section-kicker">Minimal proposed change</p>
+                <h3 id="fix-summary"></h3>
+              </div>
+              <button class="copy-button" id="copy-diff" type="button">Copy diff</button>
+            </div>
+            <pre class="diff-window" tabindex="0"><code id="diff"></code></pre>
+          </div>
+
+          <div class="verification-card">
+            <div class="checkmark" aria-hidden="true">✓</div>
+            <div><strong>Fix verified against the repository fixture</strong><p id="verification"></p></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="principles" aria-labelledby="principles-title">
+        <div>
+          <p class="section-kicker">How it works</p>
+          <h2 id="principles-title">Evidence first.<br />Explanation second.</h2>
+        </div>
+        <div class="principle-grid">
+          <article><span>01</span><h3>Trace the API</h3><p>Identify the symbol the source needs and the library version that introduced it.</p></article>
+          <article><span>02</span><h3>Inspect the manifest</h3><p>Read the dependency actually declared by Maven—without asking a model to guess.</p></article>
+          <article><span>03</span><h3>Propose less</h3><p>Return the smallest relevant edit, alongside the evidence that justifies it.</p></article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built by <a href="https://www.madebyhakim.com/" target="_blank" rel="noreferrer">Abdul Hakim Norazman</a></p>
+      <p>A focused portfolio prototype · Maven + Python</p>
+    </footer>
+  </body>
+</html>

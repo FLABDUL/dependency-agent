@@ -1,32 +1,72 @@
-# get python 3.13
+# Dependency Agent
 
-however you want to
+Dependency Agent is a focused portfolio prototype that explains a real Maven
+dependency failure with concrete evidence and a minimal patch.
 
-# get uv
+The bundled Java source uses `org.slf4j.spi.LoggingEventBuilder`, an API from
+SLF4J 2.x. The broken POM pins `slf4j-api` to 1.6.6. Dependency Agent connects
+those two facts, explains why compilation fails, and proposes the repository's
+verified 2.0.17 fix.
 
-`pip install uv`
+![Dependency Agent showing the SLF4J diagnosis](artifacts/demo-result.png)
 
-## make a venv
+## What the demo proves
 
-`uv venv`
+- Reads Java source and Maven XML rather than relying on a generated guess.
+- Identifies the incompatible API and dependency versions.
+- Returns the exact evidence supporting the diagnosis.
+- Produces the smallest relevant unified diff.
+- Compares the change with the working repository fixture.
 
-## build/run
+The public experience is intentionally curated: it does not accept uploads or
+execute arbitrary repositories.
 
-`uv build` creates the wheel file.
+## Run locally
 
-`uv run <whatever command>` executes whatever command from within the venv.
+Requires Python 3.11 or newer and [uv](https://docs.astral.sh/uv/).
 
-## also
+```bash
+uv sync --extra dev
+uv run uvicorn dependency_agent.web:app --reload
+```
 
-check out the `uv` command and `uv help` to figure out what's going on with uv.
+Open `http://127.0.0.1:8000`.
 
-# get just (optional)
+The same analyser can be used from the terminal:
 
-- get the rust toolchain + cargo - https://rustup.rs/
-- `cargo install just`
+```bash
+uv run dependency-agent analyse maven/demo-app/pom_that_do_not_work.xml
+```
 
-## use just
+For structured output, add `--json`.
 
-type `just go` to launch the python stuff
-type `just mvn1` to mvn install the working pom (need maven and jdk21)
-type `just mvnbroken1` to mvn install the broken pom
+## Test
+
+```bash
+uv run pytest
+```
+
+## Deploy
+
+The repository includes a small production `Dockerfile`. Any container host can
+run it by exposing the `PORT` environment variable.
+
+The public portfolio deployment is packaged as a self-contained edge worker
+from the same analyser output:
+
+```bash
+uv run python scripts/build_worker.py
+```
+
+## Scope and limitations
+
+This is an evidence-led demonstration, not a general dependency resolver. The
+MVP recognises the bundled SLF4J scenario only. It does not currently resolve
+transitive graphs, inspect remote repositories, or invoke a language model.
+
+Those constraints are deliberate: the demo stays fast, reproducible, safe, and
+honest about what it can infer.
+
+## Licence
+
+[MIT](LICENSE)

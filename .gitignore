@@ -3,4 +3,6 @@
 dist/
 .env
 *.pyc
+.pytest_cache/
+.codex-server.*.log
 maven/*/target/
