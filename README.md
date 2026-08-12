@@ -1,5 +1,7 @@
 # Dependency Agent
 
+**[Try the live demo](https://dependency-agent-demo.flabdul.chatgpt.site)**
+
 Dependency Agent is a focused portfolio prototype that explains a real Maven
 dependency failure with concrete evidence and a minimal patch.
 
